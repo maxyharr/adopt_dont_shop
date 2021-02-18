@@ -1,0 +1,7 @@
+<h1>Shelters Index Page</h1>
+
+<section id="adminShelters">
+<% @shelters.each do |shelter| %>
+  <%= link_to(shelter.name, "/admin/shelters/#{shelter.id}") %><br>
+<% end %>
+</section>

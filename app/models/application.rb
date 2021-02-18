@@ -30,8 +30,7 @@ class Application < ApplicationRecord
   end
 
   def change_status(app_id)
-    all_records = PetApplication.where(application_id: app_id).select(:status)
-    statuses = all_records.map{|rec| rec.status}.uniq
+    statuses = PetApplication.where(application_id: app_id).distinct(:status).pluck(:status)
     if statuses.count == 1 && statuses[0] == "Approved"
       app = Application.find(app_id)
       app.update!(status: "Approved")
