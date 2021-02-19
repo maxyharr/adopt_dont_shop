@@ -1,7 +1,15 @@
-<h1>Shelters Index Page</h1>
+<h2>Shelters Index Page</h2>
 
 <section id="adminShelters">
 <% @shelters.each do |shelter| %>
   <%= link_to(shelter.name, "/admin/shelters/#{shelter.id}") %><br>
 <% end %>
+</section>
+
+<section id="sheltersPending">
+<h3>Shelters with Pending Applications</h3>
+<% @shelt.each do |shelter| %>
+<%= link_to(shelter.name, "/admin/shelters/#{shelter.id}") %><br>
+<% end %>
+
 </section>
