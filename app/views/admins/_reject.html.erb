@@ -1,0 +1,5 @@
+<%= form_with url: "/admin/applications/#{@application.id}", method: :post, local: true do |f| %>
+    <%= f.hidden_field :pet_id, value: pet %>
+    
+    <%= f.submit "Reject" %>
+    <% end %>

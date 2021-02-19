@@ -11,11 +11,15 @@ class AdminsController < ApplicationController
     redirect_to "/admin/applications/#{params[:id]}"
   end
 
-  def shelters_index 
+  def shelters_index
     @shelters = Shelter.reverse_order
+    @shelt = Shelter.with_pending_apps
   end
 
   def shelters_show
     @shelter = Shelter.show_info(params[:id])
+    shelt = Shelter.find(params[:id])
+    @avg_age_adoptable = shelt.avg_age
+    @num_adoptable_pets = shelt.num_adoptable
   end
 end
