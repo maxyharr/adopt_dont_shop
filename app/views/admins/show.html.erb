@@ -1,28 +1,28 @@
 <h1>Admin page for <%= @application.name %>'s application</h1>
 <h2>Application Status: <%= @application.status  %></h2>
 <h3>Pets on App</h3>
-<ul>
-  <% @application.pets.each do |pet| %>
-  <%= pet.name %><br>
-  <% this_pet = PetApplication.where(pet_id: pet.id).where(application_id: @application.id) %>
-  <%= "Status for this pet on this application: " %>
-  <%= this_pet[0].status %>
-  <section> 
-    <% if pet.adoptable == false && @application.status != "Approved" %>
-    <h3>Sorry, this pet has been approved for adoption on a seperate application.</h3>
-    <%= render partial: "reject", locals: {pet: pet.id} %>
-    <% end %>
-  </section>
 
-  <section>
-    <% if this_pet[0].status == "In Progress" && pet.adoptable == true %>
-    <%= form_with url: "/admin/applications/#{@application.id}", method: :post, local: true do |f| %>
-    <%= f.hidden_field :pet_id, value: pet.id %>
-    <%= f.submit "Approve" %>
-    <% end %>
-    <%= render partial: "reject", locals: {pet: pet.id} %>
-    <% end %>
-  </section>
-  <br>
+<% @pet_applications.each do |pet_application| %>
+  <% pet = pet_application.pet %>
+
+  <%= "Status for #{pet.name}: #{pet_application.status}" %><br>
+
+  <% if @application.in_progress? && pet.not_adoptable? %>
+    <section>
+      <h3>Sorry, this pet has been approved for adoption on a seperate application.</h3>
+      <%= render partial: "pet_applications/reject", locals: {pet_application: pet_application} %>
+    </section>
   <% end %>
-</ul>
+
+
+  <% if pet.adoptable? && pet_application.in_progress? %>
+    <section>
+      <%= form_with url: approve_pet_application_path(pet_application), local: true do |f| %>
+        <%= f.submit "Approve" %>
+      <% end %>
+
+      <%= render partial: "pet_applications/reject", locals: {pet_application: pet_application} %>
+    </section>
+  <% end %>
+
+<% end %>

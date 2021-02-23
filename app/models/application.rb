@@ -1,16 +1,28 @@
-class Application < ApplicationRecord 
+class Application < ApplicationRecord
   has_many :pet_applications
   has_many :pets, through: :pet_applications
-  
+
   after_initialize :default, unless: :persisted?
 
-  def default 
+  def default
     self.status = "In Progress"
     self.description = "Please enter description"
   end
 
+  def in_progress?
+    status == 'In Progress'
+  end
+
+  def approved?
+    status == 'Approved'
+  end
+
+  def rejected?
+    status == 'Rejected'
+  end
+
   def match_pets(name)
-    if !name.nil? 
+    if !name.nil?
       Pet.where("lower(name) LIKE ?", "%#{name.downcase}%")
     end
   end
@@ -18,12 +30,12 @@ class Application < ApplicationRecord
   def pets_on_app(id)
     pets_apps = PetApplication.where("application_id = #{id}")
     pets = pets_apps.map{|pet| Pet.find(pet.pet_id)}
-  end 
+  end
 
   def change_pet_status(commit, pet_id, app_id)
     pet_app = PetApplication.where(pet_id: pet_id).where(application_id: app_id).first
     if commit == "Approve"
-      pet_app.update!(status: "Approved")  
+      pet_app.update!(status: "Approved")
     else commit == "Reject"
       pet_app.update!(status: "Rejected")
     end

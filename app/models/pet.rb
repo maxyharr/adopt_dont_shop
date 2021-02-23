@@ -16,4 +16,8 @@ class Pet < ApplicationRecord
       application.pets.update_all(adoptable: false)
     end
   end
+
+  def not_adoptable?
+    !adoptable?
+  end
 end

@@ -25,11 +25,17 @@ Rails.application.routes.draw do
   get "/applications/new", to: "applications#new"
   post "/applications", to: "applications#create"
   get "/applications/:id", to: "applications#show"
-  post "/applications/:id", to: "pet_applications#create"
   patch "/applications/:id", to: "applications#submit"
 
   get "/admin/applications/:id", to: "admins#show"
   post "/admin/applications/:id", to: "admins#update_pet_app"
   get "/admin/shelters", to: "admins#shelters_index"
   get "/admin/shelters/:id", to: "admins#shelters_show"
+
+  resources :pet_applications, only: [:create] do
+    member do
+      put 'approve'
+      put 'reject'
+    end
+  end
 end

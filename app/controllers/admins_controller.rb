@@ -1,6 +1,7 @@
 class AdminsController < ApplicationController
-  def show 
+  def show
     @application = Application.find(params[:id])
+    @pet_applications = @application.pet_applications.includes(:pet)
   end
 
   def update_pet_app
